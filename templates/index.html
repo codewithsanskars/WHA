@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+
+	<!-- Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="canonical" href="" />
+
+	<title>🌐 Website Health Analyser</title>
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css" />
+	<!-- ✅ Flask static CSS -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/website.css') }}">
+</head>
+
+<body>
+<div class="wrapper flex min-h-screen flex-col">
+	<header class="sticky inset-x-0 top-[-1px] z-50 duration-200 ease-in shadow-lg bg-white">
+		<div class="mx-auto flex max-w-8xl items-center justify-between px-4 py-4 sm:px-6 md:px-8">
+			<div class="flex px-0 md:px-0">
+				<a href="/"><span class="sr-only">NH</span>
+					<div class="relative w-[180px] h-[50px] rounded-full bg-white px-0 py-0 sm:w-[200px] sm:h-[50px]">
+						<img alt="NH" loading="lazy" decoding="async" class="object-contain p-0"
+						     src="{{ url_for('static', filename='images/nh-logo@2x.webp') }}" sizes="100vw">
+					</div>
+				</a>
+			</div>
+
+			<div class="-my-2 -mr-2 flex md:hidden">
+				<button id="openMobileMenu" class="inline-flex items-center justify-center rounded-md p-2 transition duration-150 focus:outline-none  text-zinc-400 hover:bg-zinc-100 hover:text-zinc-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 pointer cursor-pointer" type="button" aria-expanded="false">
+					<span class="sr-only">Open menu</span>
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+				</button>
+			</div>
+
+			<nav class="hidden md:flex md:flex-row md:items-center md:gap-4">
+				<a href="/" class="whitespace-nowrap text-base font-medium text-zinc-500 hover:text-zinc-900">Automated Website QA</a>
+				<a href="/" class="whitespace-nowrap text-base font-medium text-zinc-500 hover:text-zinc-900">Broken Links</a>
+				<a href="/" class="whitespace-nowrap text-base font-medium text-zinc-500 hover:text-zinc-900">Page Speed</a>
+				<a href="/" class="whitespace-nowrap text-base font-medium text-zinc-500 hover:text-zinc-900">Media Check</a>
+				<a href="/" class="bg-indigo-500 text-white focus:ring-indigo-500 hover:bg-indigo-700 shadow-sm py-[10px] px-3 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2">Get Started</a>
+			</nav>
+		</div>
+	</header>
+
+	<main class="flex-grow">
+		<section class="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8 pt-15 sm:pt-25 lg:pt-20 mb-[40px]">
+			<div class="flex justify-center">
+				<div class="flex w-full flex-col text-center md:w-10/12 lg:w-9/12">
+					<h1 class="font-heading text-3xl font-black leading-9 tracking-tight text-stone-900 sm:text-5xl sm:leading-none md:text-6xl mb-[18px] sm:mb-[24px]">
+						The Easiest Way to <span class="text-blue-500">Analyze</span> and <span class="text-blue-500">Generate</span> your Website <span class="text-blue-500">Broken Links</span>.
+					</h1>
+					<p class="mb-4 text-sm leading-5 text-stone-600 sm:mx-auto sm:max-w-xxl sm:text-lg md:mb-5 md:text-xl sm:leading-8">
+						Instantly find and fix every broken link on your website. Our tool provides the simplest way to scan your entire site, generating a clear, actionable report of all dead links (404s).
+					</p>
+					<div class="w-full mb-[24px]">
+						<form class="mx-auto flex flex-col sm:flex-row w-full gap-4 sm:max-w-4xl">
+							<div class="relative flex-1 text-left">
+								<label for="website" class="sr-only">Website</label>
+								<input id="url" name="website" class="block w-full rounded-md border-[1px] border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm sm:text-base p-3" type="text" placeholder="🔗 Enter website URL (e.g. https://example.com)">
+							</div>
+							<div class="flex gap-2 flex-col sm:flex-row">
+  <!-- Single Scan -->
+  <button value="Check Website" type="submit" class="flex items-center rounded-md border border-transparent bg-indigo-500 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 pointer cursor-pointer" onclick="scanSite(event)">
+    <i class="icon-search mr-2"></i><span class="flex-shrink-0">Scan Website</span>
+  </button>
+
+  <!-- Bulk Scan -->
+  <button type="button" class="flex items-center rounded-md border border-transparent bg-zinc-500 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 pointer cursor-pointer" onclick="scanAll()">
+    <i class="icon-globe-2 mr-2"></i><span class="flex-shrink-0">Bulk Scan</span>
+  </button>
+</div>
+
+						</form>
+					</div>
+<!-- Progress + Results Section -->
+<section class="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8 mb-[60px]">
+  <div class="flex justify-center">
+    <div class="mx-auto flex flex-col w-full sm:max-w-6xl">
+
+      <!-- Progress bar -->
+      <div class="w-full flex-1">
+        <div class="flex justify-between mb-1">
+          <span class="text-base font-medium text-gray-700">Evaluating Website</span>
+          <span id="progress-text" class="text-sm font-medium text-gray-700">0%</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-6 dark:bg-gray-700 overflow-hidden">
+          <div id="progress-bar" 
+               class="bg-indigo-600 h-6 rounded-full flex items-center justify-center text-white text-sm font-medium transition-all duration-300 ease-out" 
+               style="width: 0%">
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- Two-column layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+<!-- AI Summary -->
+<div class="relative rounded-2xl border border-gray-200 bg-white px-6 py-6 shadow-lg hover:shadow-xl transition duration-300 flex flex-col h-[450px]">
+  <h2 class="font-bold text-2xl md:text-3xl mb-4 text-indigo-700">🤖 AI Summary</h2>
+  
+  <!-- Scrollable response area -->
+  <div id="ai-summary" class="flex-1 overflow-y-auto text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none">
+    <p class="italic text-gray-400">Waiting for scan...</p>
+  </div>
+
+  <!-- Chat input -->
+  <div class="mt-4 flex">
+    <input id="chat-input" type="text" placeholder="Ask AI for recommendations..."
+           class="flex-1 rounded-l-lg border border-gray-300 px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+    <button onclick="sendChat()" 
+            class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700">
+      Send
+    </button>
+  </div>
+</div>
+
+
+<!-- Scan Log -->
+<div class="relative rounded-2xl border border-gray-100 bg-white px-6 py-6 shadow-xl hover:shadow-2xl transition duration-300">
+  <h2 class="font-bold text-2xl md:text-3xl mb-4 flex items-center text-indigo-700 gap-2">
+    📋 <span>Scan Log</span>
+  </h2>
+  <div id="log" 
+       class="h-96 overflow-y-auto whitespace-pre-wrap text-sm leading-relaxed text-gray-800 
+              bg-gradient-to-b from-gray-50 to-white rounded-xl p-4 border border-gray-100 
+              custom-scrollbar font-mono">
+    <p class="italic text-gray-400">Waiting for scan...</p>
+  </div>
+</div>
+
+
+</div>
+
+
+		<section class="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8 mb-[60px]">
+			<div class="mx-auto flex flex-col w-full sm:max-w-4xl">
+				<div class="w-full bg-[#306AA7] border border-solid border-gray-200 text-white overflow-hidden p-8 md:p-10 m-0 pb-0 md:pb-0 rounded-2xl shadow-lg">
+					<div class="w-full flex items-center justify-center flex-col md:flex-row min-h-[180px]">
+						<div class="w-full md:max-w-[55%] relative pb-[40px] pr-[0] md:pr-[50px]">
+							<div class="bg-[#daeaff] inline-block py-2 px-3 rounded-md mb-[20px]">
+								<img src="{{ url_for('static', filename='images/nh-logo@2x.webp') }}" alt="Networkhandlers">
+							</div>
+							<h2 class="font-bold text-2xl md:text-3xl text-white mb-[18px]">Embed an Audit Tool into your Website</h2>
+							<p class="text-sm md:text-[16px] mb-[20px]">Match your website's styling and colors. Show your customer a beautiful branded report. Get notified of leads straight to your Inbox.</p>
+
+							<div class="w-full flex flex-1 mb-[0px]">
+								<a class="bg-[#4BBB00] text-white hover:bg-[#44A900] shadow-sm py-[14px] px-4 rounded-md" target="_blank" href="#">Learn More - Embedding</a>
+							</div>
+						</div>
+						<div class="w-full md:max-w-[45%] justify-center items-start relative min-h-[160px]">
+							<img class="img-fluid w-full" alt="Mobile" src="{{ url_for('static', filename='images/mobile_en.png') }}">
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="relative bg-white mt-[40px]">
+		<div class="flex items-center justify-center bg-[#f6f8f9] pt-3.5 text-center text-[13.5px] md:py-4 md:text-[14px]">
+			<div class="mx-auto flex max-w-8xl gap-1">Developed by <strong>Network Handlers</strong></div>
+		</div>
+	</footer>
+</div>
+
+<!-- ✅ Flask static JS -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+function startStream(endpoint) {
+  // Reset UI
+  const logDiv = document.getElementById("log");
+  const aiSummary = document.getElementById("ai-summary");
+  const progressBar = document.getElementById("progress-bar");
+  const progressText = document.getElementById("progress-text");
+
+  logDiv.innerHTML = "";
+  aiSummary.innerHTML = `<p class="italic text-gray-400">Waiting for scan...</p>`;
+  progressBar.style.width = "0%";
+  progressBar.innerText = "0%";
+  progressText.innerText = "0%";
+
+  let lineCount = 0;
+  const evtSource = new EventSource(endpoint);
+
+  evtSource.onmessage = (e) => {
+    if (e.data === "---DONE---") {
+      evtSource.close();
+
+      // Force progress to 100%
+      progressBar.style.width = "100%";
+      progressBar.innerText = "100% Complete";
+      progressText.innerText = "100%";
+
+      // ✅ Fetch AI insights after scan
+      fetch("/ai-insights")
+        .then(r => r.json())
+        .then(data => {
+          if (data.error) {
+            aiSummary.innerHTML = `<p class="text-red-500">⚠️ ${data.error}</p>`;
+          } else {
+            aiSummary.innerHTML = marked.parse(data.summary_text || "No summary available.");
+          }
+        })
+        .catch(err => {
+          aiSummary.innerHTML = `<p class="text-red-500">⚠️ Error fetching AI summary: ${err}</p>`;
+        });
+    } else {
+      // Update scan log live
+      lineCount++;
+      logDiv.innerHTML += highlightLog(e.data) + "<br>";
+      logDiv.scrollTop = logDiv.scrollHeight;
+
+      // Update progress bar
+      let percent = Math.min(lineCount * 5, 95);
+      progressBar.style.width = percent + "%";
+      progressBar.innerText = percent + "% Complete";
+      progressText.innerText = percent + "%";
+    }
+  };
+
+  evtSource.onerror = () => {
+    logDiv.innerHTML += "<br><b style='color:red;'>Connection lost ❌</b>";
+    evtSource.close();
+  };
+}
+
+// Highlight keywords in log
+function highlightLog(line) {
+  return line
+    .replace(/SUCCESS/g, "<span class='text-green-600 font-semibold'>SUCCESS</span>")
+    .replace(/ERROR/g, "<span class='text-red-600 font-semibold'>ERROR</span>")
+    .replace(/WARNING/g, "<span class='text-yellow-600 font-semibold'>WARNING</span>");
+}
+
+function scanSite(event) {
+  event.preventDefault();
+  const url = document.getElementById("url").value.trim();
+  if (!url) {
+    alert("Please enter a website URL.");
+    return;
+  }
+  startStream(`/scan?url=${encodeURIComponent(url)}`);
+}
+
+function scanAll() {
+  startStream("/bulk-scan");
+}
+
+function showResults() {
+  window.open("/results-table", "_blank");
+}
+
+function downloadPDF() {
+  window.open("/download-pdf", "_blank");
+}
+
+/* ------------------------
+   AI CHAT inside summary
+-------------------------*/
+async function sendChat() {
+  const input = document.getElementById("chat-input");
+  const message = input.value.trim();
+  if (!message) return;
+
+  const aiBox = document.getElementById("ai-summary");
+
+  // Show user message
+  aiBox.innerHTML += `<p class="text-blue-600"><b>You:</b> ${message}</p>`;
+  aiBox.scrollTop = aiBox.scrollHeight;
+  input.value = "";
+
+  try {
+    const res = await fetch("/ai-chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
+    const data = await res.json();
+
+    if (data.response) {
+      aiBox.innerHTML += `<div class="mt-2 p-2 bg-gray-50 rounded-lg border">
+        ${marked.parse(data.response)}
+      </div>`;
+    } else {
+      aiBox.innerHTML += `<p class="text-red-500">⚠️ ${data.error || "No response"}</p>`;
+    }
+  } catch (err) {
+    aiBox.innerHTML += `<p class="text-red-500">⚠️ Request failed: ${err}</p>`;
+  }
+
+  aiBox.scrollTop = aiBox.scrollHeight;
+}
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📊 Website Scan Results</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #f7f9fc;
+      margin: 0;
+      padding: 0;
+      color: #2c3e50;
+    }
+
+    header {
+      background: linear-gradient(135deg, #8e44ad, #3498db);
+      padding: 20px;
+      color: white;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    table thead {
+      background: #3498db;
+      color: white;
+    }
+
+    table th, table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    table th {
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    table tr:hover {
+      background: #f1f7ff;
+    }
+
+    .critical { color: #e74c3c; font-weight: bold; }
+    .major { color: #e67e22; }
+    .minor { color: #f1c40f; }
+
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .footer img {
+      height: 40px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+
+    .btn {
+      display: inline-block;
+      margin: 15px 0;
+      padding: 10px 18px;
+      background: #2ecc71;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s ease;
+    }
+    .btn:hover {
+      background: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📊 Website Scan Results</h1>
+    <p>Detailed Health Report for All Analyzed Websites</p>
+  </header>
+
+  <div class="container">
+    <a href="/" class="btn">⬅️ Back to Scanner</a>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Website</th>
+          <th>Critical Issues</th>
+          <th>Major Issues</th>
+          <th>Minor Issues</th>
+          <th>Links</th>
+          <th>Images</th>
+          <th>Videos</th>
+          <th>Page Speed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for site, data in results.items() %}
+        <tr>
+          <td>{{ site }}</td>
+          <td class="critical">{{ data.issues.critical|length }}</td>
+          <td class="major">{{ data.issues.major|length }}</td>
+          <td class="minor">{{ data.issues.minor|length }}</td>
+          <td>{{ data.links }}</td>
+          <td>{{ data.images }}</td>
+          <td>{{ data.videos }}</td>
+          <td>{{ data.speed }}s</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <img src="/static/logo.png" alt="Logo"> Developed by <b>Network Handlers</b>
+  </div>
+</body>
+</html>

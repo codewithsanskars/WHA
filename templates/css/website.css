@@ -1,0 +1,176 @@
+/* General Reset */
+:root {
+	--tw-rotate-x: 0;
+	--tw-rotate-y: 0;
+	--tw-rotate: 0;
+	--tw-skew-x: 0;
+	--tw-skew-y: 0;
+	--tw-scale-x: 1;
+	--tw-scale-y: 1;
+	--tw-translate-x: 0;
+	--tw-translate-y: 0;
+	
+
+	--color-blue-500: #14B1E7;
+	--color-indigo-500: #14B1E7;
+	--color-indigo-550: #109CCC;
+	--color-indigo-600: #306AA7;
+	--color-indigo-700: #205C98;
+	--light-inverse: #252F4A;
+	--color-light: #F9F9F9;
+	--color-warning: #F6C000;
+	--warning-light: #FFF8DD;
+	--color-success: #17C653;
+	--success-light: #DFFFEA;
+	--text-gray-500: #99A1B7;
+	--border-color: #F1F1F4;
+}
+@layer utilities {
+	.text-blue-500 {
+		color: var(--color-blue-500);
+	}
+	.hover\:bg-indigo-700:hover {
+		background-color: var(--color-indigo-550) !important;
+	}
+	
+	.-scale-y-100, .transform {
+	transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+	}
+	
+	.visibility-hidden {
+		visibility: hidden;
+	}
+	.pointer-events-none {
+		pointer-events: none;
+	}
+	.last\:border-b-0:last-of-type {
+		border-bottom-width: 0 !important;
+	}
+}
+
+.text-purple-500 {
+	color: rgb(48, 106, 167);
+}
+.bg-purple-500 {
+	background-color: rgb(48, 106, 167);
+}
+
+.border-primaryStroke {
+	border-color: rgba(0,0,0,0.125);
+}
+
+.mobile-menu.is-visible {
+	opacity: 1 !important;
+	visibility: visible !important;
+	pointer-events: all !important;
+}
+
+@keyframes progress-animation {
+	0% { background-position: 1rem 0; }
+	100% { background-position: 0 0; }
+}
+.progress-bar-animated {
+	background-image: linear-gradient(
+		45deg,
+		rgba(255, 255, 255, 0.15) 25%,
+		transparent 25%,
+		transparent 50%,
+		rgba(255, 255, 255, 0.15) 50%,
+		rgba(255, 255, 255, 0.15) 75%,
+		transparent 75%,
+		transparent
+	);
+	background-size: 1rem 1rem;
+	animation: progress-animation 1s linear infinite;
+}
+
+
+.scroll {
+	overflow: scroll;
+	position: relative;
+}
+.border-bottom-dotted {
+	border-bottom-style: dotted !important;
+}
+.card-box:hover {
+	background-color: var(--color-light);
+}
+
+.badge {
+	display: inline-flex;
+	align-items: center;
+}
+.badge-light {
+	color: var(--light-inverse);
+	background-color: var(--color-light);
+}
+.badge-light-warning {
+	color: var(--color-warning);
+	background-color: var(--warning-light);
+}
+.badge-light-success {
+	color: var(--color-success);
+	background-color: var(--success-light);
+}
+
+.recommendation-list .recommendation-item:last-of-type .border-b-\[1px\] {
+	border-bottom-width: 0 !important;
+}
+
+.table-fluid {
+	width: 100%;
+	caption-side: bottom;
+	border-collapse: collapse;
+}
+.table > thead {
+	vertical-align: bottom;
+}
+.table thead {
+	color: var(--text-gray-500);
+	font-size: .95rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	vertical-align: top;
+}
+.table > :not(caption) > * > * {
+	padding: .75rem .75rem;
+}
+.table:not(.table-bordered).table-row-dashed tr {
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+	border-bottom-color: var(--border-color);
+}
+.table-fluid a {
+	word-break: break-all;
+	transition: color .2s ease;
+	color: var(--color-indigo-550);
+}
+
+.volume-bar-wrapper span {
+	background-color: var(--color-blue-500);
+	display: block;
+	height: 12px;
+	height: 0.925rem;
+	text-align: left;
+	transition: 0.5s all;
+	border-radius: 6px;
+	border-radius: calc(0.925rem / 2);
+}
+.table-responsive {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	overflow-scrolling: touch;
+}
+@media screen and (max-width: 767.98px) {
+	.table-responsive > .table > thead > tr > th,
+	.table-responsive > .table > tbody > tr > th,
+	.table-responsive > .table > tfoot > tr > th,
+	.table-responsive > .table > thead > tr > td,
+	.table-responsive > .table > tbody > tr > td,
+	.table-responsive > .table > tfoot > tr > td {
+		white-space: nowrap;
+	}
+}
+
+
+
